@@ -25,7 +25,7 @@ public class Main {
 
     private static HashMap<String, Object> mapForOperation = new HashMap<>();
     // TODO изменить путь к файлу при запуске в другой среде
-    private static final File phoneBookFile = new File("G:/Business/My/JavaProjects/HomeWork10/phoneBookFile.ser");
+    private static final File phoneBookFile = new File("C:/Java/HomeWork/src/com/company/homework/phoneBookFile.ser");
 //    private static final File phoneBookFile = new File("Z:/JavaProjects/HomeWork10/phoneBookFile.ser");
 
     public static void main(String[] args) {
