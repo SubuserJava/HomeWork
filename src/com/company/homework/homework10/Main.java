@@ -4,7 +4,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.Year;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * Попробовал объединить два задания (1 и 2) в одном. Логика программы такова:
@@ -25,11 +28,9 @@ public class Main {
 
     private static HashMap<String, Object> mapForOperation = new HashMap<>();
     // TODO изменить путь к файлу при запуске в другой среде
-    private static final File phoneBookFile = new File("C:/Java/HomeWork/src/com/company/homework/phoneBookFile.ser");
-//    private static final File phoneBookFile = new File("Z:/JavaProjects/HomeWork10/phoneBookFile.ser");
+    private static final File phoneBookFile = new File("G:/Business/My/JavaProjects/HomeWork/src/com/company/homework/homework10/phoneBookFile.ser");
 
     public static void main(String[] args) {
-        // PrintStream для вывода в консоль латиницы. У меня получаются кракозябры в консоли.
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
 
         if (createNewFileIfNotExistIfNotEmpty(phoneBookFile)) {
@@ -65,8 +66,7 @@ public class Main {
                 5. Exit
                 Enter number you select:
                 """);
-        int inputSelected = Integer.parseInt(scanner.nextLine());
-        return inputSelected;
+        return parseInt(scanner.nextLine());
     }
 
     private static void searchAndEditingContact(Scanner scanner) {
@@ -77,7 +77,7 @@ public class Main {
         String valueForSearching = scanner.nextLine();
 
         if (valueForSearching.contains("+")) {
-            for (Map.Entry entry : mapForOperation.entrySet()) {
+            for (Entry<String, Object> entry : mapForOperation.entrySet()) {
                 Contact contact = (Contact) entry.getValue();
                 if (contact.getMobilePhoneNum().contains(valueForSearching) | contact.getHomePhoneNum().contains(valueForSearching) |
                         contact.getHomePhoneNum().contains(valueForSearching) | contact.getFaxPhoneNum().contains(valueForSearching)) {
@@ -90,7 +90,7 @@ public class Main {
                             Enter any number for exit.
                             Enter number you selected:
                             """);
-                    int input = Integer.parseInt(scanner.nextLine());
+                    int input = parseInt(scanner.nextLine());
                     switch (input) {
                         case 1 -> deleteFoundContactByEMail(contact.geteMailAddress());
                         case 2 -> replaceContact(contact.geteMailAddress(), scanner);
@@ -103,7 +103,7 @@ public class Main {
             System.out.print("The phone number you entered was not found in phone book.\n");
         } else if (!valueForSearching.equals("")) {
             Map<String, Object> tempMap = new HashMap<>();
-            for (Map.Entry entry : mapForOperation.entrySet()) {
+            for (Entry<String, Object> entry : mapForOperation.entrySet()) {
                 Contact contact = (Contact) entry.getValue();
                 if (contact.getName().contains(valueForSearching)) {
                     tempMap.putIfAbsent(contact.geteMailAddress(), contact);
@@ -116,7 +116,7 @@ public class Main {
                 tempMap.entrySet().forEach(System.out::println);
                 System.out.print("Enter the mobile phone of found contacts which you want to operate: ");
                 String mobilePhoneFoundContact = scanner.nextLine();
-                for (Map.Entry entry : tempMap.entrySet()) {
+                for (Entry<String, Object> entry : tempMap.entrySet()) {
                     Contact contact = (Contact) entry.getValue();
                     if (contact.getMobilePhoneNum().contains(mobilePhoneFoundContact)) {
                         System.out.printf("The contact '%s' by name '%s'\n", contact.getName(), mobilePhoneFoundContact);
@@ -128,7 +128,7 @@ public class Main {
                                 Enter any number for exit.
                                 Enter number you selected:
                                 """);
-                        int input = Integer.parseInt(scanner.nextLine());
+                        int input = parseInt(scanner.nextLine());
                         switch (input) {
                             case 1 -> deleteFoundContactByEMail(contact.geteMailAddress());
                             case 2 -> replaceContact(contact.geteMailAddress(), scanner);
@@ -211,6 +211,9 @@ public class Main {
         } else {
             try {
                 boolean newFile = phoneBookFile.createNewFile();
+                 if (newFile) {
+                     System.out.println("Created a new file with an empty database");
+                 }
                 mapForOperation.clear();
                 writeMapForOperationToFile();
             } catch (IOException exception) {
@@ -224,7 +227,7 @@ public class Main {
         mapForOperation.clear();
         readFromFileToMapForOperation();
         boolean checkValue = true;
-        for (Map.Entry entry : mapForOperation.entrySet()) {
+        for (Entry<String, Object> entry : mapForOperation.entrySet()) {
             Contact contact = (Contact) entry.getValue();
             if (contact.getMobilePhoneNum().contains(phoneNumber) | contact.getHomePhoneNum().contains(phoneNumber) |
                     contact.getWorkPhoneNum().contains(phoneNumber) | contact.getFaxPhoneNum().contains(phoneNumber)) {
@@ -241,7 +244,7 @@ public class Main {
         mapForOperation.clear();
         readFromFileToMapForOperation();
         boolean checkValue = true;
-        for (Map.Entry entry : mapForOperation.entrySet()) {
+        for (Entry<String, Object> entry : mapForOperation.entrySet()) {
             Contact contact = (Contact) entry.getValue();
             if (contact.geteMailAddress().contains(eMail)) {
                 checkValue = true;
