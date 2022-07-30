@@ -11,22 +11,22 @@ public class Contact implements Serializable {
     @Serial
     private static final long serialVersionUID = 3237287467131086986L;
 
+    private final String EMAIL_ADDRESS;
     private String name;
     private String surname;
     private String nickName;
-    private final String eMailAddress;
     private Year birthYear;
     private ArrayList<String> mobilePhoneNum;
     private ArrayList<String> homePhoneNum;
     private ArrayList<String> workPhoneNum;
     private ArrayList<String> faxPhoneNum;
 
-    public Contact(String name, String surname, String nickName, String eMailAddress, Year birthYear, ArrayList<String> mobilePhoneNum,
+    public Contact(String name, String surname, String nickName, String EMAIL_ADDRESS, Year birthYear, ArrayList<String> mobilePhoneNum,
                    ArrayList<String> homePhoneNum, ArrayList<String> workPhoneNum, ArrayList<String> faxPhoneNum) {
         this.name = name;
         this.surname = surname;
         this.nickName = nickName;
-        this.eMailAddress = eMailAddress;
+        this.EMAIL_ADDRESS = EMAIL_ADDRESS;
         this.birthYear = birthYear;
         this.mobilePhoneNum = mobilePhoneNum;
         this.homePhoneNum = homePhoneNum;
@@ -58,8 +58,8 @@ public class Contact implements Serializable {
         this.nickName = nickName;
     }
 
-    public String geteMailAddress() {
-        return eMailAddress;
+    public String getEMAIL_ADDRESS() {
+        return EMAIL_ADDRESS;
     }
 
     public Year getBirthYear() {
@@ -106,14 +106,14 @@ public class Contact implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
         return Objects.equals(name, contact.name) && Objects.equals(surname, contact.surname) && Objects.equals(nickName, contact.nickName) &&
-                Objects.equals(eMailAddress, contact.eMailAddress) && Objects.equals(birthYear, contact.birthYear) &&
+                Objects.equals(EMAIL_ADDRESS, contact.EMAIL_ADDRESS) && Objects.equals(birthYear, contact.birthYear) &&
                 Objects.equals(mobilePhoneNum, contact.mobilePhoneNum) && Objects.equals(homePhoneNum, contact.homePhoneNum) &&
                 Objects.equals(workPhoneNum, contact.workPhoneNum) && Objects.equals(faxPhoneNum, contact.faxPhoneNum);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, surname, nickName, eMailAddress, birthYear, mobilePhoneNum, homePhoneNum, workPhoneNum, faxPhoneNum);
+        return Objects.hash(name, surname, nickName, EMAIL_ADDRESS, birthYear, mobilePhoneNum, homePhoneNum, workPhoneNum, faxPhoneNum);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class Contact implements Serializable {
         sb.append("name='").append(name).append('\'');
         sb.append(", surname='").append(surname).append('\'');
         sb.append(", nickName='").append(nickName).append('\'');
-        sb.append(", eMailAddress='").append(eMailAddress).append('\'');
+        sb.append(", eMailAddress='").append(EMAIL_ADDRESS).append('\'');
         sb.append(", birthYear='").append(birthYear).append('\'');
         sb.append(", mobilePhoneNum=").append(mobilePhoneNum);
         sb.append(", homePhoneNum=").append(homePhoneNum);

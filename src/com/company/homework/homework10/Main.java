@@ -27,13 +27,14 @@ import static java.lang.Integer.parseInt;
 public class Main {
 
     private static HashMap<String, Object> mapForOperation = new HashMap<>();
-    // TODO изменить путь к файлу при запуске в другой среде
-    private static final File phoneBookFile = new File("G:/Business/My/JavaProjects/HomeWork/src/com/company/homework/homework10/phoneBookFile.ser");
+
+    private static final File phoneBookFilePath = new File("c:/phonebook");
+    private static final File phoneBookFile = new File("C:/phonebook/phoneBookFile.ser");
 
     public static void main(String[] args) {
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
 
-        if (createNewFileIfNotExistIfNotEmpty(phoneBookFile)) {
+        if (createNewFileIfNotExistIfNotEmpty(phoneBookFile, phoneBookFilePath)) {
             System.out.print("The phonebook file present.\n");
         } else {
             System.out.println("The new phonebook file with empty base has been created.\n");
@@ -92,9 +93,9 @@ public class Main {
                             """);
                     int input = parseInt(scanner.nextLine());
                     switch (input) {
-                        case 1 -> deleteFoundContactByEMail(contact.geteMailAddress());
-                        case 2 -> replaceContact(contact.geteMailAddress(), scanner);
-                        case 3 -> showValuesContact(contact.geteMailAddress());
+                        case 1 -> deleteFoundContactByEMail(contact.getEMAIL_ADDRESS());
+                        case 2 -> replaceContact(contact.getEMAIL_ADDRESS(), scanner);
+                        case 3 -> showValuesContact(contact.getEMAIL_ADDRESS());
                         default -> System.out.print("Value not supported.\n");
                     }
                     break;
@@ -106,7 +107,7 @@ public class Main {
             for (Entry<String, Object> entry : mapForOperation.entrySet()) {
                 Contact contact = (Contact) entry.getValue();
                 if (contact.getName().contains(valueForSearching)) {
-                    tempMap.putIfAbsent(contact.geteMailAddress(), contact);
+                    tempMap.putIfAbsent(contact.getEMAIL_ADDRESS(), contact);
                 }
             }
             if (tempMap.isEmpty()) {
@@ -130,9 +131,9 @@ public class Main {
                                 """);
                         int input = parseInt(scanner.nextLine());
                         switch (input) {
-                            case 1 -> deleteFoundContactByEMail(contact.geteMailAddress());
-                            case 2 -> replaceContact(contact.geteMailAddress(), scanner);
-                            case 3 -> showValuesContact(contact.geteMailAddress());
+                            case 1 -> deleteFoundContactByEMail(contact.getEMAIL_ADDRESS());
+                            case 2 -> replaceContact(contact.getEMAIL_ADDRESS(), scanner);
+                            case 3 -> showValuesContact(contact.getEMAIL_ADDRESS());
                             default -> System.out.print("Value not supported.\n");
                         }
                         break;
@@ -182,6 +183,9 @@ public class Main {
         try (FileInputStream fileToRead = new FileInputStream(phoneBookFile);
              ObjectInputStream objectToRead = new ObjectInputStream(fileToRead)) {
             mapForOperation = (HashMap<String, Object>) objectToRead.readObject();
+            if (mapForOperation.isEmpty()) {
+                System.out.print("Yhe phone book is empty yet.\n");
+            }
         } catch (IOException | ClassNotFoundException exception) {
             exception.printStackTrace();
         }
@@ -205,16 +209,16 @@ public class Main {
      *
      * @param phoneBookFile объект для операций с файлом телефонной книги
      */
-    public static boolean createNewFileIfNotExistIfNotEmpty(File phoneBookFile) {
-        if (phoneBookFile.exists()) {
+    public static boolean createNewFileIfNotExistIfNotEmpty(File phoneBookFile, File phoneBookFilePath) {
+        if (phoneBookFile.isFile()) {
             return true;
         } else {
             try {
+                boolean newFilePath = phoneBookFilePath.mkdirs();
                 boolean newFile = phoneBookFile.createNewFile();
-                 if (newFile) {
+                 if (newFile & newFilePath) {
                      System.out.println("Created a new file with an empty database");
                  }
-                mapForOperation.clear();
                 writeMapForOperationToFile();
             } catch (IOException exception) {
                 exception.printStackTrace();
@@ -246,7 +250,7 @@ public class Main {
         boolean checkValue = true;
         for (Entry<String, Object> entry : mapForOperation.entrySet()) {
             Contact contact = (Contact) entry.getValue();
-            if (contact.geteMailAddress().contains(eMail)) {
+            if (contact.getEMAIL_ADDRESS().contains(eMail)) {
                 checkValue = true;
                 break;
             }
@@ -396,7 +400,7 @@ public class Main {
         // Create a contact and record to base.
         Contact newContact = new Contact(newName, newSurname, newNickname, newEmail, newBirthYear, mobilePhoneNumArray, homePhoneNumArray, workPhoneNumArray, faxPhoneNumArray);
         readFromFileToMapForOperation();
-        mapForOperation.putIfAbsent(newContact.geteMailAddress(), newContact);
+        mapForOperation.putIfAbsent(newContact.getEMAIL_ADDRESS(), newContact);
         writeMapForOperationToFile();
         mapForOperation.clear();
     }
@@ -416,10 +420,10 @@ public class Main {
         faxPhoneNum.add("+79844562154");
         Contact contact = new Contact("Alex", "Alex", "alexalex", "abc@abc.ru", Year.parse("1990"),
                 mobilePhoneNum, homePhoneNum, workPhoneNum, faxPhoneNum);
-        if (!mapForOperation.containsKey(contact.geteMailAddress())) {
-            mapForOperation.put(contact.geteMailAddress(), contact);
+        if (!mapForOperation.containsKey(contact.getEMAIL_ADDRESS())) {
+            mapForOperation.put(contact.getEMAIL_ADDRESS(), contact);
         } else {
-            System.out.printf("Such a contact (e-mail: %s )exists in the phone book and wil not be added.\n", contact.geteMailAddress());
+            System.out.printf("Such a contact (e-mail: %s )exists in the phone book and wil not be added.\n", contact.getEMAIL_ADDRESS());
         }
         ArrayList<String> mobilePhoneNum1 = new ArrayList<>();
         mobilePhoneNum1.add("+79874567891");
@@ -432,10 +436,10 @@ public class Main {
         faxPhoneNum1.add("+79844564568");
         Contact contact1 = new Contact("Dmitriy", "Dmitriy", "dimdim", "dim@abc.ru", Year.parse("1995"),
                 mobilePhoneNum1, homePhoneNum1, workPhoneNum1, faxPhoneNum1);
-        if (!mapForOperation.containsKey(contact1.geteMailAddress())) {
-            mapForOperation.put(contact1.geteMailAddress(), contact1);
+        if (!mapForOperation.containsKey(contact1.getEMAIL_ADDRESS())) {
+            mapForOperation.put(contact1.getEMAIL_ADDRESS(), contact1);
         } else {
-            System.out.printf("Such a contact (e-mail: %s )exists in the phone book and wil not be added.\n", contact1.geteMailAddress());
+            System.out.printf("Such a contact (e-mail: %s )exists in the phone book and wil not be added.\n", contact1.getEMAIL_ADDRESS());
         }
         ArrayList<String> mobilePhoneNum2 = new ArrayList<>();
         mobilePhoneNum2.add("+79874562563");
@@ -448,10 +452,10 @@ public class Main {
         faxPhoneNum2.add("+79844563578");
         Contact contact2 = new Contact("Mikhail", "Mikhail", "mihmih", "mih@abc.ru", Year.parse("2000"),
                 mobilePhoneNum2, homePhoneNum2, workPhoneNum2, faxPhoneNum2);
-        if (!mapForOperation.containsKey(contact2.geteMailAddress())) {
-            mapForOperation.put(contact2.geteMailAddress(), contact2);
+        if (!mapForOperation.containsKey(contact2.getEMAIL_ADDRESS())) {
+            mapForOperation.put(contact2.getEMAIL_ADDRESS(), contact2);
         } else {
-            System.out.printf("Such a contact (e-mail: %s )exists in the phone book and wil not be added.\n", contact2.geteMailAddress());
+            System.out.printf("Such a contact (e-mail: %s )exists in the phone book and wil not be added.\n", contact2.getEMAIL_ADDRESS());
         }
         writeMapForOperationToFile();
         mapForOperation.clear();
