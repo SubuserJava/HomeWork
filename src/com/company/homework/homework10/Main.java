@@ -100,8 +100,9 @@ public class Main {
                     }
                     break;
                 }
+                System.out.print("The phone number you entered was not found in phone book.\n");
+                break;
             }
-            System.out.print("The phone number you entered was not found in phone book.\n");
         } else if (!valueForSearching.equals("")) {
             Map<String, Object> tempMap = new HashMap<>();
             for (Entry<String, Object> entry : mapForOperation.entrySet()) {
@@ -184,7 +185,7 @@ public class Main {
              ObjectInputStream objectToRead = new ObjectInputStream(fileToRead)) {
             mapForOperation = (HashMap<String, Object>) objectToRead.readObject();
             if (mapForOperation.isEmpty()) {
-                System.out.print("Yhe phone book is empty yet.\n");
+                System.out.print("The phone book is empty.\n");
             }
         } catch (IOException | ClassNotFoundException exception) {
             exception.printStackTrace();
@@ -212,19 +213,18 @@ public class Main {
     public static boolean createNewFileIfNotExistIfNotEmpty(File phoneBookFile, File phoneBookFilePath) {
         if (phoneBookFile.isFile()) {
             return true;
-        } else {
-            try {
-                boolean newFilePath = phoneBookFilePath.mkdirs();
-                boolean newFile = phoneBookFile.createNewFile();
-                 if (newFile & newFilePath) {
-                     System.out.println("Created a new file with an empty database");
-                 }
-                writeMapForOperationToFile();
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-            return false;
         }
+        try {
+            boolean newFilePath = phoneBookFilePath.mkdirs();
+            boolean newFile = phoneBookFile.createNewFile();
+            if (newFile & newFilePath) {
+                System.out.println("Created a new file with an empty database");
+            }
+            writeMapForOperationToFile();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return false;
     }
 
     private static boolean isExistContactByPhoneNumber(String phoneNumber) {
@@ -233,8 +233,8 @@ public class Main {
         boolean checkValue = true;
         for (Entry<String, Object> entry : mapForOperation.entrySet()) {
             Contact contact = (Contact) entry.getValue();
-            if (contact.getMobilePhoneNum().contains(phoneNumber) | contact.getHomePhoneNum().contains(phoneNumber) |
-                    contact.getWorkPhoneNum().contains(phoneNumber) | contact.getFaxPhoneNum().contains(phoneNumber)) {
+            if (contact.getMobilePhoneNum().contains(phoneNumber) || contact.getHomePhoneNum().contains(phoneNumber) ||
+                    contact.getWorkPhoneNum().contains(phoneNumber) || contact.getFaxPhoneNum().contains(phoneNumber)) {
                 checkValue = true;
                 break;
             }
