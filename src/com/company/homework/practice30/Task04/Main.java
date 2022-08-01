@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        fillTelevisionSet();
+        fillTVsList();
         System.out.print("All list set of TVs:\n");
         televisionArrayList
                 .forEach(System.out::println);
@@ -42,7 +42,7 @@ public class Main {
                 .forEach(System.out::println);
     }
 
-    private static void fillTelevisionSet() {
+    private static void fillTVsList() {
         televisionArrayList.add(new Television("KDL-50", Year.parse("2005"), 150_000L, "50'", "Sony"));
         televisionArrayList.add(new Television("KDL-60", Year.parse("2008"), 200_000L, "60'", "Sony"));
         televisionArrayList.add(new Television("ABC-40", Year.parse("2010"), 130_000L, "40'", "Toshiba"));
