@@ -43,11 +43,8 @@ public class Philosopher implements Runnable {
                 } else {
 
                 }
-
-
                     leftFork.unlock();
                     rightFork.unlock();
-
 
                 timeThinking = timeThinking();
                 System.out.printf("The philosopher %s ate and put the forks. Thinking %s sec...\n", id, (timeThinking / 1000));
