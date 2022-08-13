@@ -23,13 +23,13 @@ public class Philosopher implements Runnable {
             try {
                 if (!rightFork.isHeldByCurrentThread()) {
                     rightFork.tryLock();
-                    timeThinking = timeThinking();
+                    timeThinking = getTimeThinking();
                     System.out.printf("Philosopher '%s' take right fork. Fork is one. Thinking %s sec...\n", name, timeThinking / 1000);
                     Thread.sleep(timeThinking);
                     if (!leftFork.isHeldByCurrentThread()) {
                         leftFork.tryLock();
-                        timeEating = timeEating();
-                        System.out.printf("Philosopher '%s' took two forks. Eating %s sec...\n", name, (timeEating() / 1000));
+                        timeEating = getTimeEating();
+                        System.out.printf("Philosopher '%s' took two forks. Eating %s sec...\n", name, (getTimeEating() / 1000));
                         Thread.sleep(timeEating);
 
                         if (leftFork.isHeldByCurrentThread()) {
@@ -39,7 +39,7 @@ public class Philosopher implements Runnable {
                             rightFork.unlock();
                         }
 
-                        timeThinking = timeThinking();
+                        timeThinking = getTimeThinking();
                         System.out.printf("The philosopher '%s' ate and put the forks. Thinking %s sec...\n", name, (timeThinking / 1000));
                         Thread.sleep(timeThinking);
                     }
@@ -50,11 +50,11 @@ public class Philosopher implements Runnable {
         } while (true);
     }
 
-    public int timeEating() {
+    public int getTimeEating() {
         return 1000 * ((new Random().nextInt(10) + 1));
     }
 
-    public int timeThinking() {
+    public int getTimeThinking() {
         return 1000 * ((new Random().nextInt(5) + 1));
     }
 }
