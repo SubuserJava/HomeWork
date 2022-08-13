@@ -5,13 +5,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Philosopher implements Runnable {
 
-    int id;
+    String name;
     ReentrantLock leftFork;
     ReentrantLock rightFork;
 
-    public Philosopher(int id) {
-        this.id = id;
-
+    public Philosopher(String name, ReentrantLock rightFork, ReentrantLock leftFork) {
+        this.name = name;
+        this.rightFork = rightFork;
+        this.leftFork = leftFork;
     }
 
     @Override
@@ -20,47 +21,40 @@ public class Philosopher implements Runnable {
         int timeEating;
         do {
             try {
-                rightFork = Forks.forks[id];
-                leftFork = Forks.forks[(id + 1) % 5];
-
-//                rightFork.lock();
-//                leftFork.lock();
-
-
-                if (!rightFork.isLocked()) {
-                    rightFork.lock();
-                    timeThinking = timeThinking();
-                    System.out.printf("Philosopher %s take right fork. Fork is one. Thinking %s sec...\n", id, timeThinking / 1000);
+                if (!rightFork.isHeldByCurrentThread()) {
+                    rightFork.tryLock();
+                    timeThinking = getTimeThinking();
+                    System.out.printf("Philosopher '%s' take right fork. Fork is one. Thinking %s sec...\n", name, timeThinking / 1000);
                     Thread.sleep(timeThinking);
-                    if (!leftFork.isLocked()) {
-                        leftFork.lock();
-                        timeEating = timeEating();
-                        System.out.printf("Philosopher %s took two forks. Eating %s sec...\n", id, (timeEating() / 1000));
+                    if (!leftFork.isHeldByCurrentThread()) {
+                        leftFork.tryLock();
+                        timeEating = getTimeEating();
+                        System.out.printf("Philosopher '%s' took two forks. Eating %s sec...\n", name, (getTimeEating() / 1000));
                         Thread.sleep(timeEating);
-                    } else {
 
+                        if (leftFork.isHeldByCurrentThread()) {
+                            leftFork.unlock();
+                        }
+                        if (rightFork.isHeldByCurrentThread()) {
+                            rightFork.unlock();
+                        }
+
+                        timeThinking = getTimeThinking();
+                        System.out.printf("The philosopher '%s' ate and put the forks. Thinking %s sec...\n", name, (timeThinking / 1000));
+                        Thread.sleep(timeThinking);
                     }
-                } else {
-
                 }
-                    leftFork.unlock();
-                    rightFork.unlock();
-
-                timeThinking = timeThinking();
-                System.out.printf("The philosopher %s ate and put the forks. Thinking %s sec...\n", id, (timeThinking / 1000));
-                Thread.sleep(timeThinking);
-
-            } catch (IllegalMonitorStateException | InterruptedException e) {
-                e.printStackTrace();
+            } catch (IllegalMonitorStateException | InterruptedException exception) {
+                exception.printStackTrace();
             }
         } while (true);
     }
 
-    public int timeEating() {
+    public int getTimeEating() {
         return 1000 * ((new Random().nextInt(10) + 1));
     }
 
-    public int timeThinking() {
+    public int getTimeThinking() {
         return 1000 * ((new Random().nextInt(5) + 1));
     }
 }
