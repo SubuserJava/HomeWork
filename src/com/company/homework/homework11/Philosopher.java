@@ -19,23 +19,23 @@ public class Philosopher implements Runnable {
     public void run() {
         int timeThinking;
         int timeEating;
-        do {
-            try {
-                if (!rightFork.isHeldByCurrentThread()) {
+        try {
+            while (true) {
+                if (!getStateCurrentThread(rightFork)) {
                     rightFork.tryLock();
                     timeThinking = getTimeThinking();
                     System.out.printf("Philosopher '%s' take right fork. Fork is one. Thinking %s sec...\n", name, timeThinking / 1000);
                     Thread.sleep(timeThinking);
-                    if (!leftFork.isHeldByCurrentThread()) {
+                    if (!getStateCurrentThread(leftFork)) {
                         leftFork.tryLock();
                         timeEating = getTimeEating();
                         System.out.printf("Philosopher '%s' took two forks. Eating %s sec...\n", name, (getTimeEating() / 1000));
                         Thread.sleep(timeEating);
 
-                        if (leftFork.isHeldByCurrentThread()) {
+                        if (getStateCurrentThread(leftFork)) {
                             leftFork.unlock();
                         }
-                        if (rightFork.isHeldByCurrentThread()) {
+                        if (getStateCurrentThread(rightFork)) {
                             rightFork.unlock();
                         }
 
@@ -44,11 +44,13 @@ public class Philosopher implements Runnable {
                         Thread.sleep(timeThinking);
                     }
                 }
-            } catch (IllegalMonitorStateException | InterruptedException exception) {
-                exception.printStackTrace();
             }
-        } while (true);
+        } catch (IllegalMonitorStateException | InterruptedException exception) {
+            exception.printStackTrace();
+        }
     }
+
+    private boolean getStateCurrentThread(ReentrantLock reentrantLock) { return reentrantLock.isHeldByCurrentThread(); }
 
     public int getTimeEating() {
         return 1000 * ((new Random().nextInt(10) + 1));
