@@ -28,8 +28,8 @@ public class Main {
 
     private static HashMap<String, Object> mapForOperation = new HashMap<>();
 
-    private static final File phoneBookFilePath = new File("c:/phonebook");
-    private static final File phoneBookFile = new File("C:/phonebook/phoneBookFile.ser");
+    private static final File phoneBookFilePath = new File("/phonebook");
+    private static final File phoneBookFile = new File("/phonebook/phoneBookFile.ser");
 
     public static void main(String[] args) {
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
@@ -243,19 +243,21 @@ public class Main {
         mapForOperation.clear();
         return checkValue;
     }
-
+// TODO доделать проверку e-mailсоздать дополнительный метод проверки на пустую базу.
     private static boolean isExistContactByEMail(String eMail) {
-        mapForOperation.clear();
+//        mapForOperation.clear();
         readFromFileToMapForOperation();
         boolean checkValue = true;
-        for (Entry<String, Object> entry : mapForOperation.entrySet()) {
-            Contact contact = (Contact) entry.getValue();
-            if (contact.getEMAIL_ADDRESS().contains(eMail)) {
-                checkValue = true;
-                break;
+//        if () {
+            for (Entry<String, Object> entry : mapForOperation.entrySet()) {
+                Contact contact = (Contact) entry.getValue();
+                if (contact.getEMAIL_ADDRESS().contains(eMail)) {
+                    checkValue = true;
+                    break;
+                }
+                checkValue = false;
             }
-            checkValue = false;
-        }
+//        }
         mapForOperation.clear();
         return checkValue;
     }
@@ -274,21 +276,21 @@ public class Main {
         String newEmail = "";
         boolean cycleCheckEmail;
         do {
-            String newEmailForCycle = scanner.nextLine();
-            newEmailForCycle = newEmailForCycle.toLowerCase(Locale.ROOT);
+            String newEmailForCheck = scanner.nextLine();
+            newEmailForCheck = newEmailForCheck.toLowerCase(Locale.ROOT);
             Pattern pattern = Pattern.compile("^([\\p{L}-\\.]+){1,64}@([\\p{L}&&[^_]]+){2,255}.[a-z]{2,}$");
-            if (pattern.matcher(newEmailForCycle).matches()) {
-                if (isExistContactByEMail(newEmailForCycle)) {
+            if (pattern.matcher(newEmailForCheck).matches()) {
+                if (isExistContactByEMail(newEmailForCheck)) {
                     cycleCheckEmail = true;
                     System.out.print("the email is not valid in format or it is already present in the database. Enter e-mail again: ");
                 } else {
                     cycleCheckEmail = false;
-                    newEmail = newEmailForCycle;
+                    newEmail = newEmailForCheck;
                     System.out.print("The e-mail address matches the e-mail format and it is not present in phone book and will be add.\n");
                 }
             } else {
                 cycleCheckEmail = true;
-                System.out.print("the email is not valid in format or it is already present in the database. Enter e-mail again: ");
+                System.out.print("The email is not valid in format. Enter e-mail again: ");
             }
         } while (cycleCheckEmail);
 

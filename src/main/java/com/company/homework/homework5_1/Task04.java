@@ -17,11 +17,11 @@ public class Task04 {
         inputSentence = inputSentence.replaceAll("(?U)\\W+\\s*", " "); // Очистка строки. Только буквы.
         String[] wordsFromSentenceArray = inputSentence.split(" "); // Рразбивка подготовленной строки на слова и заполнение массива словами. Такс только кирилица или латиница
 
-        if (getSentenceType(inputSentence.charAt(0)) == "d" | getSentenceType(inputSentence.charAt(0)) == "u") {  // Блок проверки предложения циры и символы, кириллицу и латиницу.
+        if (getSentenceType(inputSentence.charAt(0)).equals("d") | getSentenceType(inputSentence.charAt(0)).equals("u")) {  // Блок проверки предложения циры и символы, кириллицу и латиницу.
             System.out.println("Please, restart program and enter sentence made up from words.");
-        } else if ((getSentenceType(inputSentence.charAt(0)) == "c")) {
+        } else if ((getSentenceType(inputSentence.charAt(0)).equals("c"))) {
             checkCyrillicWords(wordsFromSentenceArray);
-        } else if (getSentenceType(inputSentence.charAt(0)) == "l") {
+        } else if (getSentenceType(inputSentence.charAt(0)).equals("l")) {
             checkLatinWords(wordsFromSentenceArray);
         }
     }

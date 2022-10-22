@@ -22,15 +22,16 @@ public class Main {
     public static void main(String[] args) {
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
 
-UserProfile userProfile = new UserProfile("Petrov Petr Petrovich", LocalDate.of(1990, 3, 12), "+79219406233");
+        UserProfile userProfile = new UserProfile("Petrov Petr Petrovich", LocalDate.of(1990, 3, 12), "+79219406233");
 
         System.out.println(userProfile);
 
-
         System.out.println("""
                 1. Показать список кошельков.
-                2.
+                2. Показать список карт.
+                3. Показать список планируемых затрат.
+                4. Показать список планируемых поступлений.
+                5. 
                 """);
-        System.out.print("\033[H\033[J");
     }
 }
