@@ -16,16 +16,16 @@ public class Task09 {
         System.out.println("Enter second sentence supposed anagram.");
         String secondSentence = consoleInput.nextLine();
 
-        if (prepareFirstString(firstSentence).equals(prepareSecondString(secondSentence))) {   // Вызов методов и сравнение отсортированных массивов.
+        if (prepareString(firstSentence).equals(prepareString(secondSentence))) {   // Вызов методов и сравнение отсортированных массивов.
             System.out.println("First sentence is anagram to second sentence.");
         } else {
             System.out.println("No. Not anagram.");
         }
     }
 
-    private static String prepareFirstString(String firstSentence) {
-        firstSentence = firstSentence.toLowerCase().trim().replaceAll("\\s+", "");  // Строку в нижний регистр, убирание пробелов (начальных и между словами).
-        char[] charArrFirst = firstSentence.toCharArray();                 // Строку - в массив.
+    private static String prepareString(String stringSentence) {
+        stringSentence = stringSentence.toLowerCase().trim().replaceAll("[\\s+]", "");  // Строку в нижний регистр, убирание пробелов (начальных и между словами).
+        char[] charArrFirst = stringSentence.toCharArray();                 // Строку - в массив.
         Arrays.sort(charArrFirst);                                     // Сортировка массива.
         return new String(charArrFirst);
     }

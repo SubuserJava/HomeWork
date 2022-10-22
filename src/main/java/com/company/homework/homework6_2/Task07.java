@@ -8,8 +8,7 @@ public class Task07 {
         System.out.println(stringSentence);
         String[] tempSentenceArray = stringSentence.split(" ");
 
-        for (int countWords = 0; countWords < tempSentenceArray.length; countWords++) {   // передача в метод слов на проверку.
-            String tempWord = tempSentenceArray[countWords];
+        for (String tempWord : tempSentenceArray) {   // передача в метод слов на проверку.
             int countStart = 0;
             int countEnd = tempWord.length() - 1;
             printCheckResult(tempWord, countStart, countEnd);   // no yes no no yes yes no
@@ -17,12 +16,11 @@ public class Task07 {
     }
 
     private static void printCheckResult(String tempWord, int countStart, int countEnd) {
-        if (countStart == tempWord.length() - 1 / 2) {                   // Проверка позиции символа в слове, проверка применима как к словам
+        if (countStart == (tempWord.length() - 1) / 2) {                   // Проверка позиции символа в слове, проверка применима как к словам
             System.out.print("yes ");                                    // с нечётным кол-ом букв, так и с чётным.
             return;
         }
-        if (tempWord.charAt(countStart) == tempWord.charAt(countEnd)) {   // Сравнение символов. Если хоть одно несовпадение - прерывание, "no".
-        } else {
+        if (tempWord.charAt(countStart) != tempWord.charAt(countEnd)) {   // Сравнение символов. Если хоть одно несовпадение - прерывание, "no".
             System.out.print("no ");
             return;
         }
